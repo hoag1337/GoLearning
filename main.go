@@ -34,6 +34,17 @@ func longestMonotonicSubarray(nums []int) int {
 	return maxLength
 }
 
+func singleNumber(nums []int) int {
+	if len(nums) == 1 {
+		return nums[0]
+	}
+	var xorElement = nums[0]
+	for i := 1; i < len(nums); i++ {
+		xorElement = xorElement ^ nums[i]
+	}
+	return xorElement
+}
+
 //TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
 // the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
 
