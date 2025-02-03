@@ -45,9 +45,30 @@ func singleNumber(nums []int) int {
 	return xorElement
 }
 
-//TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
+func maxSubarraySumCircular(nums []int) int {
+	var maxSum = nums[0]
+	var minSum = nums[0]
+	var tempMax = 0
+	var tempMin = 0
+	var totalSum = 0
+
+	for i := 0; i < len(nums); i++ {
+		tempMax = max(tempMax, 0) + nums[i]
+		maxSum = max(tempMax, maxSum)
+
+		tempMin = min(tempMin, 0) + nums[i]
+		minSum = min(tempMin, minSum)
+
+		totalSum += nums[i]
+	}
+
+	if minSum == totalSum {
+		return maxSum
+	} else {
+		return max(maxSum, totalSum-minSum)
+	}
+}
 
 func main() {
-	fmt.Print(longestMonotonicSubarray([]int{1, 4, 3, 3, 2}))
+	fmt.Print(maxSubarraySumCircular([]int{1, -2, 3, -2}))
 }
