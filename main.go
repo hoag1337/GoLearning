@@ -69,6 +69,34 @@ func maxSubarraySumCircular(nums []int) int {
 	}
 }
 
+func candy(ratings []int) int {
+	var n = len(ratings)
+	var totalCandies = n
+	for i := 1; i < n; {
+		if ratings[i] == ratings[i-1] {
+			i++
+			continue
+		}
+		var currentPeek = 0
+		for i < n && ratings[i] > ratings[i-1] {
+			currentPeek++
+			totalCandies += currentPeek
+			i++
+		}
+		if i == n {
+			return totalCandies
+		}
+		var currentValley = 0
+		for i < n && ratings[i] < ratings[i-1] {
+			currentValley++
+			totalCandies += currentValley
+			i++
+		}
+		totalCandies -= min(currentValley, currentPeek)
+	}
+	return totalCandies
+}
+
 func main() {
 	fmt.Print(maxSubarraySumCircular([]int{1, -2, 3, -2}))
 }
