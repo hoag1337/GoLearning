@@ -4,6 +4,12 @@ import (
 	"fmt"
 )
 
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
 func longestMonotonicSubarray(nums []int) int {
 	if len(nums) == 1 {
 		return 1
@@ -97,6 +103,21 @@ func candy(ratings []int) int {
 	return totalCandies
 }
 
+func coinChange(coins []int, amount int) int {
+	var dp = make([]int, amount+1)
+	for i := 0; i < len(dp); i++ {
+		dp[i] = amount + 1
+	}
+	dp[0] = 0
+	for i := 1; i < len(dp); i++ {
+		for j := 0; j < len(coins); j++ {
+			if i-coins[j] >= 0 {
+				dp[i] = min(dp[i], dp[i-coins[j]]+1)
+			}
+		}
+	}
+	return dp[amount]
+}
 func main() {
-	fmt.Print(maxSubarraySumCircular([]int{1, -2, 3, -2}))
+	fmt.Print(coinChange([]int{1, 2, 5}, 11))
 }
