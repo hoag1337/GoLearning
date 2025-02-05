@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"slices"
 )
 
 type TreeNode struct {
@@ -118,6 +119,70 @@ func coinChange(coins []int, amount int) int {
 	}
 	return dp[amount]
 }
+
+var happenedNumber []int
+
+func getTotalSquare(number int) int {
+	var res int = 0
+	if number == 1 {
+		return 1
+	}
+	for number > 0 {
+		res += (number % 10) * (number % 10)
+		number /= 10
+	}
+	if slices.Contains(happenedNumber, res) {
+		return -1
+	}
+	happenedNumber = append(happenedNumber, res)
+	return getTotalSquare(res)
+}
+
+func isHappy(n int) bool {
+	return getTotalSquare(n) == 1
+}
+
+func maxAscendingSum(nums []int) int {
+	var maxSum int = nums[0]
+	var tempSum int = nums[0]
+	for i := 1; i < len(nums); i++ {
+		if nums[i] > nums[i-1] {
+			tempSum += nums[i]
+		} else {
+			if tempSum > maxSum {
+				maxSum = tempSum
+			}
+			tempSum = nums[i]
+		}
+		if tempSum > maxSum {
+			maxSum = tempSum
+		}
+	}
+	return maxSum
+}
+func areAlmostEqual(s1 string, s2 string) bool {
+	var diffCount = 0
+	var diffColls1 = make([]byte, 0)
+	var diffColls2 = make([]byte, 0)
+	for i := 0; i < len(s1); i++ {
+		if s1[i] != s2[i] {
+			diffCount++
+			diffColls2 = append(diffColls2, s2[i])
+			diffColls1 = append(diffColls1, s1[i])
+		}
+		if diffCount > 2 {
+			return false
+		}
+	}
+	if diffCount == 2 {
+		return diffColls1[0] == diffColls2[1] && diffColls1[1] == diffColls2[0]
+	}
+	if diffCount != 0 {
+		return false
+	} else {
+		return true
+	}
+}
 func main() {
-	fmt.Print(coinChange([]int{1, 2, 5}, 11))
+	fmt.Print(areAlmostEqual("caa", "aaz"))
 }
