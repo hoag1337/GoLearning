@@ -203,6 +203,41 @@ func tupleSameProduct(nums []int) int {
 	}
 	return count
 }
+
+func queryResults(limit int, queries [][]int) []int {
+	var result = make([]int, len(queries))
+	var freqMap = make(map[int]int)
+	var coloredBall = make(map[int]int)
+	var diffColorCount = 0
+	for i := 0; i < len(queries); i++ {
+		if coloredBall[queries[i][0]] == 0 {
+			if freqMap[queries[i][1]] == 0 {
+				diffColorCount++
+			}
+		} else {
+			var oldColor = coloredBall[queries[i][0]]
+			var newColor = queries[i][1]
+			freqMap[oldColor]--
+			if freqMap[oldColor] == 0 {
+				diffColorCount--
+			}
+			if freqMap[newColor] == 0 {
+				diffColorCount++
+			}
+		}
+		coloredBall[queries[i][0]] = queries[i][1]
+		freqMap[queries[i][1]]++
+		result[i] = diffColorCount
+	}
+	return result
+}
 func main() {
-	fmt.Print(areAlmostEqual("caa", "aaz"))
+	array := [][]int{
+		{0, 1},
+		{0, 4},
+		{0, 3},
+		{0, 1},
+		{1, 2},
+	}
+	fmt.Print(queryResults(4, array))
 }
