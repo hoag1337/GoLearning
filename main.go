@@ -183,6 +183,26 @@ func areAlmostEqual(s1 string, s2 string) bool {
 		return true
 	}
 }
+
+func tupleSameProduct(nums []int) int {
+	var freqMap = make(map[int]int)
+	for i := 0; i < len(nums)-1; i++ {
+		for j := i + 1; j < len(nums); j++ {
+			if freqMap[nums[i]*nums[j]] == 0 {
+				freqMap[nums[i]*nums[j]] = 1
+			} else {
+				freqMap[nums[i]*nums[j]]++
+			}
+		}
+	}
+	var count int = 0
+	for _, value := range freqMap {
+		if value > 1 {
+			count += 4 * value * (value - 1)
+		}
+	}
+	return count
+}
 func main() {
 	fmt.Print(areAlmostEqual("caa", "aaz"))
 }
