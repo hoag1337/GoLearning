@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"slices"
 	"sort"
+	"strings"
+	"unicode"
 )
 
 type TreeNode struct {
@@ -288,6 +291,46 @@ func countBadPairs(nums []int) int64 {
 	return int64(len(nums)*(len(nums)-1)/2 - notBadPairCount)
 }
 
-func main() {
+type Stack struct {
+	data []interface{}
+	top  int
+}
 
+func (s *Stack) Push(element interface{}) {
+	s.top++
+	s.data = append(s.data, element)
+}
+
+func (s *Stack) Pop() interface{} {
+	if len(s.data) > 0 {
+		s.top--
+		last := s.data[s.top]
+		s.data = s.data[:s.top]
+
+		return last
+	}
+
+	return nil
+}
+
+func (s Stack) DataToString() string {
+	var strData []string
+	for _, v := range s.data {
+		strData = append(strData, fmt.Sprintf("%v", v))
+	}
+	return strings.Join(strData, ", ")
+}
+func clearDigits(s string) string {
+	notDigitStack := Stack{}
+	for i := 0; i < len(s); i++ {
+		if unicode.IsDigit(rune(s[i])) {
+			notDigitStack.Pop()
+		} else {
+			notDigitStack.Push(s[i])
+		}
+	}
+	return notDigitStack.DataToString()
+}
+func main() {
+	fmt.Println(clearDigits("abc12"))
 }
