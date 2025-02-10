@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"slices"
+	"sort"
 )
 
 type TreeNode struct {
@@ -231,13 +231,63 @@ func queryResults(limit int, queries [][]int) []int {
 	}
 	return result
 }
-func main() {
-	array := [][]int{
-		{0, 1},
-		{0, 4},
-		{0, 3},
-		{0, 1},
-		{1, 2},
+
+type NumberContainers struct {
+	numbers map[int]int
+	index   map[int][]int
+}
+
+func Constructor() NumberContainers {
+	return NumberContainers{
+		numbers: make(map[int]int),
+		index:   make(map[int][]int),
 	}
-	fmt.Print(queryResults(4, array))
+}
+
+func (this *NumberContainers) Change(index int, number int) {
+	var oldValue = this.numbers[index]
+	this.numbers[index] = number
+	if oldValue != 0 {
+		this.index[oldValue] = DeleteSorted(this.index[oldValue], index)
+	}
+	this.index[number] = InsertSorted(this.index[number], index)
+}
+
+func (this *NumberContainers) Find(number int) int {
+	if this.index[number] != nil {
+		return -1
+	} else {
+		return this.index[number][0]
+	}
+}
+
+func InsertSorted(arr []int, val int) []int {
+	idx := sort.SearchInts(arr, val)
+	arr = append(arr, 0)
+	copy(arr[idx+1:], arr[idx:])
+	arr[idx] = val
+	return arr
+}
+
+func DeleteSorted(arr []int, val int) []int {
+	idx := sort.SearchInts(arr, val)
+	if idx < len(arr) && arr[idx] == val {
+		arr = append(arr[:idx], arr[idx+1:]...)
+	}
+	return arr
+}
+
+func countBadPairs(nums []int) int64 {
+	var notBadPairCount = 0
+	var mapper = make(map[int]int)
+	for i := 0; i < len(nums); i++ {
+		mapper[nums[i]-i]++
+		notBadPairCount += mapper[nums[i]-i]
+	}
+
+	return int64(len(nums)*(len(nums)-1)/2 - notBadPairCount)
+}
+
+func main() {
+
 }
