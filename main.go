@@ -377,6 +377,19 @@ func zeroFilledSubarray(nums []int) int64 {
 	}
 	return int64(result)
 }
+
+func repeatedCharacter(s string) byte {
+	vector := 0
+
+	for _, c := range s {
+		if vector&(1<<(c-'a')) > 0 {
+			return byte(c)
+		}
+		vector |= 1 << (c - 'a')
+	}
+	return ' '
+}
+
 func main() {
 	input := []int{0, 0, 0, 2, 0, 0}
 	fmt.Print(zeroFilledSubarray(input))
