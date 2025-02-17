@@ -331,6 +331,53 @@ func clearDigits(s string) string {
 	}
 	return notDigitStack.DataToString()
 }
+func solve(index int, digits string, comb []string, ans *[]string, temp string) {
+	if index == len(digits) {
+		*ans = append(*ans, temp)
+		return
+	}
+
+	for _, ch := range comb[digits[index]-'0'] {
+		solve(index+1, digits, comb, ans, temp+string(ch))
+	}
+}
+
+func letterCombinations(digits string) []string {
+	if len(digits) == 0 {
+		return []string{}
+	}
+	comb := []string{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"}
+	var ans []string
+	solve(0, digits, comb, &ans, "")
+	return ans
+}
+func zeroFilledSubarray(nums []int) int64 {
+	result := 0
+	isValid := false
+	startIndex := -1
+	endIndex := -1
+	for i := 0; i < len(nums); i++ {
+		if nums[i] == 0 {
+			if isValid {
+				endIndex = i
+			} else {
+				isValid = true
+				startIndex = i
+				endIndex = i
+			}
+			if i == len(nums)-1 {
+				n := endIndex - startIndex + 1
+				result += n + (n-1)*n/2
+			}
+		} else if nums[i] != 0 && isValid {
+			n := endIndex - startIndex + 1
+			result += n + (n-1)*n/2
+			isValid = false
+		}
+	}
+	return int64(result)
+}
 func main() {
-	fmt.Println(clearDigits("abc12"))
+	input := []int{0, 0, 0, 2, 0, 0}
+	fmt.Print(zeroFilledSubarray(input))
 }
