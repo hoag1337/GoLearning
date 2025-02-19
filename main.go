@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
+	"math"
 	"slices"
 	"sort"
-	"strings"
-	"unicode"
 )
 
 type TreeNode struct {
@@ -291,45 +290,27 @@ func countBadPairs(nums []int) int64 {
 	return int64(len(nums)*(len(nums)-1)/2 - notBadPairCount)
 }
 
-type Stack struct {
-	data []interface{}
-	top  int
+type stack[T any] struct {
+	Push   func(T)
+	Pop    func() T
+	Length func() int
 }
 
-func (s *Stack) Push(element interface{}) {
-	s.top++
-	s.data = append(s.data, element)
-}
-
-func (s *Stack) Pop() interface{} {
-	if len(s.data) > 0 {
-		s.top--
-		last := s.data[s.top]
-		s.data = s.data[:s.top]
-
-		return last
+func Stack[T any]() stack[T] {
+	slice := make([]T, 0)
+	return stack[T]{
+		Push: func(i T) {
+			slice = append(slice, i)
+		},
+		Pop: func() T {
+			res := slice[len(slice)-1]
+			slice = slice[:len(slice)-1]
+			return res
+		},
+		Length: func() int {
+			return len(slice)
+		},
 	}
-
-	return nil
-}
-
-func (s Stack) DataToString() string {
-	var strData []string
-	for _, v := range s.data {
-		strData = append(strData, fmt.Sprintf("%v", v))
-	}
-	return strings.Join(strData, ", ")
-}
-func clearDigits(s string) string {
-	notDigitStack := Stack{}
-	for i := 0; i < len(s); i++ {
-		if unicode.IsDigit(rune(s[i])) {
-			notDigitStack.Pop()
-		} else {
-			notDigitStack.Push(s[i])
-		}
-	}
-	return notDigitStack.DataToString()
 }
 func solve(index int, digits string, comb []string, ans *[]string, temp string) {
 	if index == len(digits) {
@@ -390,7 +371,102 @@ func repeatedCharacter(s string) byte {
 	return ' '
 }
 
+func equalPairs(grid [][]int) int {
+	var result int = 0
+	hashedRow := make(map[string]int)
+	for i := 0; i < len(grid); i++ {
+		var newRow string = ""
+		for j := 0; j < len(grid[i]); j++ {
+			newRow += string(grid[i][j] * 10)
+		}
+		hashedRow[newRow]++
+	}
+	for i := 0; i < len(grid[0]); i++ {
+		var newRow string = ""
+		for j := 0; j < len(grid); j++ {
+			newRow += string(grid[j][i] * 10)
+		}
+		if hashedRow[newRow] > 0 {
+			result += hashedRow[newRow]
+		}
+	}
+	return result
+}
+
+// MLE
+func checkAround(i int, j int, matrix [][]int) int64 {
+	return int64(matrix[i][j] + matrix[i+1][j] + matrix[i][j+1] + matrix[i+1][j+1])
+}
+
+func failcountBlackBlocks(m int, n int, coordinates [][]int) []int64 {
+	result := make([]int64, 5)
+	matrix := make([][]int, m)
+	for i := 0; i < m; i++ {
+		matrix[i] = make([]int, n)
+	}
+	for _, value := range coordinates {
+		matrix[value[0]][value[1]] = 1
+	}
+	for i := 0; i < m-1; i++ {
+		for j := 0; j < n-1; j++ {
+			result[checkAround(i, j, matrix)]++
+		}
+	}
+	return result
+}
+
+func getHappyString(n int, k int) string {
+	stringStack := []string{""}
+	index := 0
+	for len(stringStack) > 0 {
+		current := stringStack[len(stringStack)-1]
+		stringStack = stringStack[:len(stringStack)-1]
+		if len(current) == n {
+			index++
+			if index == k {
+				return current
+			}
+			continue
+		}
+		for i := 'c'; i >= 'a'; i-- {
+			if len(current) == 0 || current[len(current)-1] != uint8(i) {
+				stringStack = append(stringStack, current+string(i))
+			}
+		}
+	}
+	return ""
+}
+
+func maximumsSplicedArray(nums1 []int, nums2 []int) int {
+	sum1 := 0
+	sum2 := 0
+	maxProfit := 0
+	maxProfit2 := 0
+	currentSum := 0
+	currentSum2 := 0
+	for i := 0; i < len(nums1); i++ {
+		sum1 += nums1[i]
+		sum2 += nums2[i]
+		temp := nums2[i] - nums1[i]
+		temp2 := nums1[i] - nums2[i]
+		currentSum = int(math.Max(float64(currentSum)+float64(temp), float64(temp)))
+		maxProfit = int(math.Max(float64(maxProfit), float64(currentSum)))
+		currentSum2 = int(math.Max(float64(currentSum2)+float64(temp2), float64(temp2)))
+		maxProfit2 = int(math.Max(float64(maxProfit2), float64(currentSum2)))
+	}
+	return int(math.Max(math.Max(float64(sum1+maxProfit), float64(sum1)), math.Max(float64(sum2+maxProfit2), float64(sum2))))
+}
+
+func poorPigs(buckets int, minutesToDie int, minutesToTest int) int {
+	result := 0
+	for math.Pow(float64((minutesToTest/minutesToDie)+1), float64(result)) < float64(buckets) {
+		result++
+	}
+	return result
+}
+
 func main() {
-	input := []int{0, 0, 0, 2, 0, 0}
-	fmt.Print(zeroFilledSubarray(input))
+	a1 := []int{10, 20, 50, 15, 30, 10}
+	a2 := []int{40, 20, 10, 100, 10, 10}
+	fmt.Print(maximumsSplicedArray(a1, a2))
 }
