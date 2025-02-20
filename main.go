@@ -393,28 +393,6 @@ func equalPairs(grid [][]int) int {
 	return result
 }
 
-// MLE
-func checkAround(i int, j int, matrix [][]int) int64 {
-	return int64(matrix[i][j] + matrix[i+1][j] + matrix[i][j+1] + matrix[i+1][j+1])
-}
-
-func failcountBlackBlocks(m int, n int, coordinates [][]int) []int64 {
-	result := make([]int64, 5)
-	matrix := make([][]int, m)
-	for i := 0; i < m; i++ {
-		matrix[i] = make([]int, n)
-	}
-	for _, value := range coordinates {
-		matrix[value[0]][value[1]] = 1
-	}
-	for i := 0; i < m-1; i++ {
-		for j := 0; j < n-1; j++ {
-			result[checkAround(i, j, matrix)]++
-		}
-	}
-	return result
-}
-
 func getHappyString(n int, k int) string {
 	stringStack := []string{""}
 	index := 0
@@ -465,8 +443,44 @@ func poorPigs(buckets int, minutesToDie int, minutesToTest int) int {
 	return result
 }
 
+func checkAround(i, j int, matrix [][]int, visited [][]bool) int {
+	if i >= 0 && i < len(matrix) && j >= 0 && j < len(matrix[0]) && !visited[i][j] && matrix[i][j] != 0 {
+		visited[i][j] = true
+	} else {
+		return 0
+	}
+	return int(1 + checkAround(i+1, j, matrix, visited) + checkAround(i, j+1, matrix, visited) + checkAround(i-1, j, matrix, visited) + checkAround(i, j-1, matrix, visited))
+}
+
+func countServers(grid [][]int) int {
+	var localCount int = 0
+	var visited [][]bool = make([][]bool, len(grid))
+	for index, _ := range grid {
+		visited[index] = make([]bool, len(grid[index]))
+	}
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[i]); j++ {
+			if grid[i][j] == 1 && !visited[i][j] {
+				temp := int(checkAround(i, j, grid, visited))
+				if temp != 1 {
+					localCount += temp
+				}
+			}
+		}
+	}
+	return localCount
+}
+func findDifferentBinaryString(nums []string) string {
+	result := ""
+	for i := 0; i < len(nums); i++ {
+		if nums[i][i] == '0' {
+			result += "1"
+		} else {
+			result += "0"
+		}
+	}
+	return result
+}
 func main() {
-	a1 := []int{10, 20, 50, 15, 30, 10}
-	a2 := []int{40, 20, 10, 100, 10, 10}
-	fmt.Print(maximumsSplicedArray(a1, a2))
+	fmt.Print(countServers([][]int{{1, 0}, {0, 1}}))
 }
