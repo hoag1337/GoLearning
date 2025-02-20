@@ -5,6 +5,7 @@ import (
 	"math"
 	"slices"
 	"sort"
+	"strings"
 )
 
 type TreeNode struct {
@@ -508,6 +509,26 @@ func numMovesStones(a int, b int, c int) []int {
 	}
 	maxMove = high - med - 1 + med - low - 1
 	return []int{minMove, maxMove}
+}
+
+func modifyString(s string) string {
+	str := strings.Split(s, "")
+	chars := []string{"a", "b", "c"}
+
+	for i := range str {
+		if str[i] != "?" {
+			continue
+		}
+
+		for _, c := range chars {
+			if (i == 0 || str[i-1] != c) && (i == len(s)-1 || str[i+1] != c) {
+				str[i] = c
+				break
+			}
+		}
+	}
+
+	return strings.Join(str[:], "")
 }
 
 func main() {
