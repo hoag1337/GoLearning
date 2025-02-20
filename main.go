@@ -531,6 +531,22 @@ func modifyString(s string) string {
 	return strings.Join(str[:], "")
 }
 
+func mostWordsFound(sentences []string) int {
+	maxSpaceCount := 0
+	for i := 0; i < len(sentences); i++ {
+		spaceCount := 0
+		for j := 0; j < len(sentences[i]); j++ {
+			if sentences[i][j] == ' ' {
+				spaceCount++
+			}
+		}
+		if spaceCount > maxSpaceCount {
+			maxSpaceCount = spaceCount
+		}
+	}
+	return maxSpaceCount + 1
+}
+
 func main() {
 	fmt.Print(countServers([][]int{{1, 0}, {0, 1}}))
 }
