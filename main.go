@@ -547,6 +547,92 @@ func mostWordsFound(sentences []string) int {
 	return maxSpaceCount + 1
 }
 
+/*
+  - // This is the MountainArray's API interface.
+  - // You should not implement it, or speculate about its implementation
+  - type MountainArray struct {
+  - }
+    *
+  - func (this *MountainArray) get(index int) int {}
+  - func (this *MountainArray) length() int {}
+
+import(
+"fmt"
+)
+
+	func findInMountainArray(target int, mountainArr *MountainArray) int {
+		n := mountainArr.length()
+		if mountainArr.get(0) > target && mountainArr.get(n-1) > target{
+			return -1
+		}
+		left := 0
+		right := n - 1
+		var peak int
+		for left < right{
+			mid := left + (right - left) / 2
+			if mountainArr.get(mid) < mountainArr.get(mid + 1){
+				left = mid + 1
+			} else {
+				right = mid
+			}
+		}
+		fmt.Println(left)
+		peak = left
+		peakValue := mountainArr.get(peak)
+		if target > peakValue{
+			return  -1
+		}
+
+		if peakValue == target{
+			return peak
+		} else {
+			result := -1
+			if mountainArr.get(0) <= target {
+				left = 0
+				right = peak
+				for left <= right{
+					fmt.Println()
+					fmt.Println(left)
+					fmt.Println(right)
+					med := left + (right-left)/2
+					temp := mountainArr.get(med)
+					if temp == target{
+						result = med
+						break
+					} else if temp < target{
+						left = med+1
+					} else {
+						right = med-1
+					}
+				}
+				if result != -1 {
+					return result
+				}
+			}
+			if mountainArr.get(n-1) <= target {
+				left = peak
+				right = n-1
+				for left <= right{
+					med := left + (right-left)/2
+					fmt.Println()
+					fmt.Println(left)
+					fmt.Println(right)
+					temp := mountainArr.get(med)
+					if temp == target{
+						result = med
+						break
+					} else if temp > target{
+						left = med+1
+					} else {
+						right = med-1
+					}
+				}
+			}
+			return result
+		}
+	}
+*/
 func main() {
 	fmt.Print(countServers([][]int{{1, 0}, {0, 1}}))
+	fmt.Prin
 }
