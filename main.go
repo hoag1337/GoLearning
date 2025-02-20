@@ -481,6 +481,20 @@ func findDifferentBinaryString(nums []string) string {
 	}
 	return result
 }
+
+func sumOfTheDigitsOfHarshadNumber(x int) int {
+	sumOfDigits := 0
+	k := x
+	for x > 0 {
+		sumOfDigits += x % 10
+		x /= 10
+	}
+	if k%sumOfDigits == 0 {
+		return sumOfDigits
+	}
+	return -1
+}
+
 func main() {
 	fmt.Print(countServers([][]int{{1, 0}, {0, 1}}))
 }
