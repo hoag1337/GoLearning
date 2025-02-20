@@ -495,6 +495,21 @@ func sumOfTheDigitsOfHarshadNumber(x int) int {
 	return -1
 }
 
+func numMovesStones(a int, b int, c int) []int {
+	var minMove, maxMove int
+	high := int(math.Max(float64(c), math.Max(float64(a), float64(b))))
+	low := int(math.Min(float64(c), math.Min(float64(a), float64(b))))
+	med := a + b + c - low - high
+	if med-low > 1 {
+		minMove++
+	}
+	if high-med > 1 {
+		minMove++
+	}
+	maxMove = high - med - 1 + med - low - 1
+	return []int{minMove, maxMove}
+}
+
 func main() {
 	fmt.Print(countServers([][]int{{1, 0}, {0, 1}}))
 }
