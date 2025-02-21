@@ -727,6 +727,29 @@ func canArrange(arr []int, k int) bool {
 	return true
 }
 
+func countSubarrays(nums []int, k int) int64 {
+	maxEle := 0
+	for i := range nums {
+		maxEle = max(maxEle, nums[i])
+	}
+	var res int64 = 0
+	count := 0
+	left := 0
+	for right := range nums {
+		if nums[right] == maxEle {
+			count++
+		}
+		for left <= right && count >= k {
+			res += int64(len(nums) - right)
+			if nums[left] == maxEle {
+				count--
+			}
+			left++
+		}
+	}
+	return res
+}
+
 func main() {
-	fmt.Print(canArrange([]int{-10, 10}, 2))
+	fmt.Print(countSubarrays([]int{1, 3, 2, 3, 3}, 2))
 }
