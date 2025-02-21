@@ -750,6 +750,29 @@ func countSubarrays(nums []int, k int) int64 {
 	return res
 }
 
+func distMoney(money int, children int) int {
+	switch {
+	case children == 0 || money < children:
+		return -1
+	case children == 1 && money == 4:
+		return -1
+	case children == 1 && money == 8:
+		return 1
+	case children == 1:
+		return 0
+	}
+
+	dpPrevious := distMoney(money-8, children-1)
+	switch {
+	case dpPrevious == -1 && children >= 2:
+		return 0
+	case dpPrevious == -1:
+		return -1
+	default:
+		return 1 + dpPrevious
+	}
+}
+
 func main() {
-	fmt.Print(countSubarrays([]int{1, 3, 2, 3, 3}, 2))
+	fmt.Print(distMoney(9, 2))
 }
