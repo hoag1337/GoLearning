@@ -5,6 +5,7 @@ import (
 	"math"
 	"slices"
 	"sort"
+	"strconv"
 	"strings"
 )
 
@@ -632,7 +633,100 @@ import(
 		}
 	}
 */
+
+//// SeatManager seat construction
+//type SeatManager struct {
+//	seats []bool
+//	min   int
+//}
+//
+//func SeatConstructor(n int) SeatManager {
+//	return SeatManager{make([]bool, n+1), 1}
+//}
+//
+//func (this *SeatManager) Reserve() int {
+//	for this.seats[this.min] {
+//		this.min++
+//	}
+//	this.seats[this.min] = true
+//	return this.min
+//}
+//
+//func (this *SeatManager) Unreserve(seatNumber int) {
+//	this.seats[seatNumber] = false
+//	if seatNumber < this.min {
+//		this.min = seatNumber
+//	}
+//}
+
+func numberOfSubarrays(nums []int, k int) int {
+	prefixOddCount := make([]int, len(nums)+1)
+	temp := 0
+	for i := 0; i < len(nums)+1; i++ {
+		prefixOddCount[i] = temp
+		if i < len(nums) && nums[i]%2 == 1 {
+			temp++
+		}
+	}
+	result := 0
+	left := 0
+	right := 1
+	for right < len(prefixOddCount) {
+		if prefixOddCount[right]-prefixOddCount[left] == k {
+			i := left + 1
+			j := right + 1
+			for prefixOddCount[i] == prefixOddCount[left] && i < right {
+				i++
+			}
+			for j < len(prefixOddCount) && prefixOddCount[j] == prefixOddCount[right] {
+				j++
+			}
+			result += (i - left) * (j - right)
+			left = i
+			right = j
+
+		} else if prefixOddCount[right]-prefixOddCount[left] < k {
+			right++
+		}
+	}
+	return result
+}
+
+func secondHighest(s string) int {
+	largestTwo := []int{-1, -1}
+	for i := 0; i < len(s); i++ {
+		num, err := strconv.Atoi(string(s[i]))
+		if err != nil {
+			continue
+		}
+		if num > largestTwo[0] {
+			largestTwo[1] = largestTwo[0]
+			largestTwo[0] = num
+		} else if num < largestTwo[0] {
+			if num > largestTwo[1] {
+				largestTwo[1] = num
+			}
+		}
+	}
+	return largestTwo[1]
+}
+
+func canArrange(arr []int, k int) bool {
+	storage := make([]int, k)
+	for i := 0; i < len(arr); i++ {
+		storage[((arr[i]%k)+k)%k]++
+	}
+	if storage[0]%2 == 1 {
+		return false
+	}
+	for i := 1; i < len(storage); i++ {
+		if storage[i] != storage[k-i] {
+			return false
+		}
+	}
+	return true
+}
+
 func main() {
-	fmt.Print(countServers([][]int{{1, 0}, {0, 1}}))
-	fmt.Prin
+	fmt.Print(canArrange([]int{-10, 10}, 2))
 }
