@@ -241,7 +241,7 @@ type NumberContainers struct {
 	index   map[int][]int
 }
 
-func Constructor() NumberContainers {
+func NumberContainersConstructor() NumberContainers {
 	return NumberContainers{
 		numbers: make(map[int]int),
 		index:   make(map[int][]int),
@@ -773,6 +773,153 @@ func distMoney(money int, children int) int {
 	}
 }
 
-func main() {
-	fmt.Print(distMoney(9, 2))
+func waysToBuyPensPencils(total int, cost1 int, cost2 int) int64 {
+	result := int64(0)
+	pencil := 0
+	for total-pencil*cost1 >= 0 {
+		result += int64((total-pencil*cost1)/cost2 + 1)
+		pencil++
+	}
+	return result
 }
+
+func numOfSubarrays(arr []int) int {
+	modulo := int64(math.Pow(10, 9) + 7)
+	result := 0
+	prefixSum := make([]int, len(arr)+1)
+	prefixSum[0] = 0
+	oddCount := 0
+	evenCount := 1
+	for i := 1; i < len(prefixSum); i++ {
+		prefixSum[i] = prefixSum[i-1] + arr[i-1]
+		if prefixSum[i]%2 == 0 {
+			evenCount++
+			result += oddCount
+		} else {
+			oddCount++
+			result += evenCount
+		}
+	}
+
+	return int(int64(result) % modulo)
+}
+
+func maxAbsoluteSum(nums []int) int {
+	minPrefixSum := 0
+	maxPrefixSum := 0
+	prefixSum := 0
+	for _, num := range nums {
+		prefixSum += num
+		minPrefixSum = min(minPrefixSum, prefixSum)
+		maxPrefixSum = max(maxPrefixSum, prefixSum)
+	}
+
+	return maxPrefixSum - minPrefixSum
+}
+
+func search(nums []int, target int) int {
+	left, right := 0, len(nums)-1
+	for left <= right {
+		mid := left + (right-left)/2
+		if nums[mid] == target {
+			return mid
+		} else {
+			if nums[mid] > target {
+				right = mid - 1
+			} else {
+				left = mid + 1
+			}
+		}
+	}
+	return -1
+}
+
+func hIndex(citations []int) int {
+	left, right := 0, len(citations)-1
+	for left <= right {
+		mid := left + (right-left)/2
+		if citations[mid] >= len(citations)-mid {
+			right = mid - 1
+		} else {
+			left = mid + 1
+		}
+	}
+	return len(citations) - left
+}
+
+func main() {
+	fmt.Print(romanToInt("XIX"))
+}
+
+func canCompleteCircuit(gas []int, cost []int) int {
+	totalGas, totalCost, startingPoint, currentGas := 0, 0, 0, 0
+	for i := 0; i < len(gas); i++ {
+		totalGas += gas[i]
+		totalCost += cost[i]
+		currentGas += gas[i] - cost[i]
+		if currentGas < 0 {
+			startingPoint = i + 1
+			currentGas = 0
+		}
+	}
+	if totalGas < totalCost {
+		return -1
+	} else {
+		return startingPoint
+	}
+}
+
+/* Randomized Set
+type RandomizedSet struct {
+	arr  []int
+	size int
+	set  map[int]int
+}
+
+func Constructor() RandomizedSet {
+	arr := make([]int, 0)
+	size := 0
+	set := make(map[int]int)
+	return RandomizedSet{
+		arr:  arr,
+		size: size,
+		set:  set,
+	}
+}
+
+func (this *RandomizedSet) Insert(val int) bool {
+	_, ok := this.set[val]
+	if ok {
+		return false
+	}
+
+	this.arr = append(this.arr, val)
+	this.set[val] = this.size
+	this.size++
+	return true
+}
+
+func (this *RandomizedSet) Remove(val int) bool {
+	index, ok := this.set[val]
+	if !ok {
+		return false
+	}
+
+	// Swap the element to remove with the last element
+	lastElement := this.arr[this.size-1]
+	this.arr[index] = lastElement
+	this.set[lastElement] = index
+
+	// Remove the last element
+	this.arr = this.arr[:this.size-1]
+	delete(this.set, val)
+	this.size--
+	return true
+}
+
+func (this *RandomizedSet) GetRandom() int {
+	index := rand.Intn(this.size)
+	return this.arr[index]
+}
+
+*/
