@@ -1145,6 +1145,16 @@ func largestRectangleArea(heights []int) int {
 	return maxArea
 }
 
+func maxScoreSightseeingPair(values []int) int {
+	maxScore := 0
+	bestLeft := values[0]
+	for j := 1; j < len(values); j++ {
+		maxScore = int(math.Max(float64(maxScore), float64(bestLeft+values[j]-j)))
+		bestLeft = int(math.Max(float64(bestLeft), float64(values[j]+j)))
+	}
+	return maxScore
+}
+
 func main() {
 	//p1 := []int{1, 0}
 	//p2 := []int{0, 1}
