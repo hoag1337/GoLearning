@@ -1111,13 +1111,47 @@ func findArray(pref []int) []int {
 	return result
 }
 
+//func maximalRectangle(matrix [][]byte) int {
+//	arr := matrix[0]
+//	for i := 0; i < len(matrix); i++ {
+//
+//	}
+//}
+
+func largestRectangleArea(heights []int) int {
+	var stack []int
+	maxArea := 0
+	n := len(heights)
+
+	for i := 0; i <= n; i++ {
+		currentHeight := 0
+		if i < n {
+			currentHeight = heights[i]
+		}
+
+		for len(stack) > 0 && heights[stack[len(stack)-1]] > currentHeight {
+			height := heights[stack[len(stack)-1]]
+			stack = stack[:len(stack)-1]
+			width := i
+			if len(stack) > 0 {
+				width = i - stack[len(stack)-1] - 1
+			}
+			maxArea = max(maxArea, height*width)
+		}
+
+		stack = append(stack, i)
+	}
+
+	return maxArea
+}
+
 func main() {
 	//p1 := []int{1, 0}
 	//p2 := []int{0, 1}
 	//p3 := []int{-1, 0}
 	//p4 := []int{0, -1}
 
-	fmt.Print(minOperations("0"))
+	fmt.Print(largestRectangleArea([]int{0, 9}))
 }
 
 /* Randomized Set
