@@ -1082,6 +1082,18 @@ func abs(x int) int {
 	return x
 }
 
+func minOperations(boxes string) []int {
+	result := make([]int, len(boxes))
+	for i := 0; i < len(boxes); i++ {
+		for j := 0; j < len(boxes); j++ {
+			if j != i && boxes[j] == '1' {
+				result[i] += abs(j - i)
+			}
+		}
+	}
+	return result
+}
+
 func scoreOfString(s string) int {
 	sum := 0
 	for i := 1; i < len(s); i++ {
@@ -1091,12 +1103,12 @@ func scoreOfString(s string) int {
 }
 
 func main() {
-	p1 := []int{1, 0}
-	p2 := []int{0, 1}
-	p3 := []int{-1, 0}
-	p4 := []int{0, -1}
+	//p1 := []int{1, 0}
+	//p2 := []int{0, 1}
+	//p3 := []int{-1, 0}
+	//p4 := []int{0, -1}
 
-	fmt.Print(validSquare(p1, p2, p3, p4))
+	fmt.Print(minOperations("0"))
 }
 
 /* Randomized Set
