@@ -1102,6 +1102,15 @@ func scoreOfString(s string) int {
 	return sum
 }
 
+func findArray(pref []int) []int {
+	result := make([]int, len(pref))
+	result[0] = pref[0]
+	for i := 1; i < len(pref); i++ {
+		result[i] = result[i-1] ^ pref[i]
+	}
+	return result
+}
+
 func main() {
 	//p1 := []int{1, 0}
 	//p2 := []int{0, 1}
