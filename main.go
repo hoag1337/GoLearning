@@ -1164,14 +1164,28 @@ func climbStairs(n int) int {
 	}
 	return dp[n]
 }
-
+func getDescentPeriods(prices []int) int64 {
+	var result int64 = 1
+	dp := make([]int, len(prices))
+	dp[0] = 1
+	for i := 1; i < len(prices); i++ {
+		if prices[i] == prices[i-1]-1 {
+			dp[i] = dp[i-1] + 1
+			result += int64(dp[i])
+		} else {
+			dp[i] = 1
+			result += int64(dp[i])
+		}
+	}
+	return result
+}
 func main() {
 	//p1 := []int{1, 0}
 	//p2 := []int{0, 1}
 	//p3 := []int{-1, 0}
 	//p4 := []int{0, -1}
 
-	fmt.Print(largestRectangleArea([]int{0, 9}))
+	fmt.Print(getDescentPeriods([]int{3, 2, 1, 4}))
 }
 
 /* Randomized Set
