@@ -847,10 +847,6 @@ func hIndex(citations []int) int {
 	return len(citations) - left
 }
 
-func main() {
-	fmt.Print(romanToInt("XIX"))
-}
-
 func canCompleteCircuit(gas []int, cost []int) int {
 	totalGas, totalCost, startingPoint, currentGas := 0, 0, 0, 0
 	for i := 0; i < len(gas); i++ {
@@ -867,6 +863,240 @@ func canCompleteCircuit(gas []int, cost []int) int {
 	} else {
 		return startingPoint
 	}
+}
+
+func transformArray(nums []int) []int {
+	result := make([]int, len(nums))
+	indexFromLast := len(nums) - 1
+	indexFromFirst := 0
+	for i := 0; i < len(nums) && indexFromFirst <= indexFromLast; i++ {
+		if nums[i]%2 == 1 {
+			result[indexFromLast] = 1
+			indexFromLast--
+		} else {
+			result[indexFromFirst] = 0
+			indexFromFirst++
+		}
+	}
+	return result
+}
+func countArrays(original []int, bounds [][]int) int {
+	leftBound, rightBound := bounds[0][0], bounds[0][1]
+	for i := 1; i < len(bounds); i++ {
+		diff := original[i] - original[i-1]
+		leftBound = leftBound + diff
+		rightBound = rightBound + diff
+		var r, z = mutualInterval(leftBound, rightBound, bounds[i][0], bounds[i][1])
+		if r == 0 && z == 0 {
+			return 0
+		}
+		leftBound = r
+		rightBound = z
+	}
+	return rightBound - leftBound + 1
+}
+func mutualInterval(a, b, c, d int) (int, int) {
+	// Check if there is an overlap
+	if b >= c && d >= a {
+		// Compute the mutual interval
+		start := max(a, c)
+		end := min(b, d)
+		return start, end
+	}
+
+	// No overlap
+	return 0, 0
+}
+
+// Helper function to compute the minimum of two integers
+func min(x, y int) int {
+	if x < y {
+		return x
+	}
+	return y
+}
+
+// Helper function to compute the maximum of two integers
+func max(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
+}
+
+func largestInteger(nums []int, k int) int {
+	if len(nums) == 1 {
+		return nums[0]
+	}
+	globalCounter := make(map[int]int)
+	localCounter := make(map[int]int)
+	for i := 0; i < k; i++ {
+		localCounter[nums[i]]++
+	}
+	for key, _ := range localCounter {
+		globalCounter[key]++
+	}
+	result := -1
+	for i := k; i < len(nums); i++ {
+		localCounter[nums[i]]++
+		localCounter[nums[i-k]]--
+		if localCounter[nums[i-k]] == 0 {
+			delete(localCounter, nums[i-k])
+		}
+		for key, _ := range localCounter {
+			globalCounter[key]++
+		}
+	}
+	for key, value := range globalCounter {
+		if value == 1 && key > result {
+			result = key
+		}
+	}
+	return result
+}
+
+func mergeArrays(nums1 [][]int, nums2 [][]int) [][]int {
+	m, n, firstPointer, lastPointer := len(nums1), len(nums2), 0, 0
+	result := make([][]int, 0)
+	for firstPointer < m || lastPointer < n {
+		temp := make([]int, 2)
+		var index int
+		if firstPointer >= m {
+			index = nums2[lastPointer][0]
+		} else if lastPointer >= n {
+			index = nums1[firstPointer][0]
+		} else {
+			index = min(nums1[firstPointer][0], nums2[lastPointer][0])
+		}
+
+		temp[0] = index
+		if firstPointer < m && nums1[firstPointer][0] == index {
+			temp[1] += nums1[firstPointer][1]
+			firstPointer++
+		}
+		if lastPointer < n && nums2[lastPointer][0] == index {
+			temp[1] += nums2[lastPointer][1]
+			lastPointer++
+		}
+		result = append(result, temp)
+	}
+	return result
+}
+
+func pivotArray(nums []int, pivot int) []int {
+	less, equal, bigger := make([]int, 0), make([]int, 0), make([]int, 0)
+	for i := 0; i < len(nums); i++ {
+		if nums[i] < pivot {
+			less = append(less, nums[i])
+		} else if nums[i] > pivot {
+			bigger = append(bigger, nums[i])
+		} else {
+			equal = append(equal, nums[i])
+		}
+	}
+	for _, value := range equal {
+		less = append(less, value)
+	}
+	for _, value := range bigger {
+		less = append(less, value)
+	}
+	return less
+}
+
+func validSquare(p1 []int, p2 []int, p3 []int, p4 []int) bool {
+	var diff12, diff13, diff14, diff23, diff24, diff34 int64
+	coll := [][]int{p1, p2, p3, p4}
+	for i := 0; i < len(coll)-1; i++ {
+		for j := i + 1; j < len(coll[i]); j++ {
+			if coll[i][0] == coll[j][0] && coll[i][1] == coll[j][1] {
+				return false
+			}
+		}
+	}
+	dict := make(map[int64]int)
+	diff12 = int64(math.Abs(float64(p1[0]-p2[0]))*math.Abs(float64(p1[0]-p2[0])) + math.Abs(float64(p1[1]-p2[1]))*math.Abs(float64(p1[1]-p2[1])))
+	dict[diff12]++
+
+	diff14 = int64(math.Abs(float64(p1[0]-p4[0]))*math.Abs(float64(p1[0]-p4[0])) + math.Abs(float64(p1[1]-p4[1]))*math.Abs(float64(p1[1]-p4[1])))
+	dict[diff14]++
+
+	diff23 = int64(math.Abs(float64(p2[0]-p3[0]))*math.Abs(float64(p2[0]-p3[0])) + math.Abs(float64(p2[1]-p3[1]))*math.Abs(float64(p2[1]-p3[1])))
+	dict[diff23]++
+
+	diff34 = int64(math.Abs(float64(p4[0]-p3[0]))*math.Abs(float64(p4[0]-p3[0])) + math.Abs(float64(p4[1]-p3[1]))*math.Abs(float64(p4[1]-p3[1])))
+	dict[diff34]++
+
+	diff13 = int64(math.Abs(float64(p1[0]-p3[0]))*math.Abs(float64(p1[0]-p3[0])) + math.Abs(float64(p1[1]-p3[1]))*math.Abs(float64(p1[1]-p3[1])))
+	dict[diff13]++
+
+	diff24 = int64(math.Abs(float64(p2[0]-p4[0]))*math.Abs(float64(p2[0]-p4[0])) + math.Abs(float64(p2[1]-p4[1]))*math.Abs(float64(p2[1]-p4[1])))
+	dict[diff24]++
+	if len(dict) != 2 {
+		return false
+	} else {
+		var equalLength int64 = math.MaxInt64
+		var maxLength int64 = math.MinInt64
+		for key, _ := range dict {
+			if key < equalLength {
+				equalLength = key
+			}
+			if key > maxLength {
+				maxLength = key
+			}
+		}
+		if dict[equalLength] == 4 && dict[maxLength] == 2 {
+			return true
+		} else {
+			return false
+		}
+	}
+}
+
+func coloredCells(n int) int64 {
+	return int64(2*n*n - 2*n + 1)
+}
+
+func findMissingAndRepeatedValues(grid [][]int) []int {
+	n := len(grid)
+	result := make([]int, 2)
+	sum := 0
+	squareSum := int64(0)
+	idealSum := (n * n) * (n*n + 1) / 2
+	idealSquareSum := int64((n*n)*(n*n+1)*(2*n*n+1)) / 6
+	for i := 0; i < len(grid); i++ {
+		for j := 0; j < len(grid[i]); j++ {
+			sum += grid[i][j]
+			squareSum += int64(grid[i][j] * grid[i][j])
+		}
+	}
+	diff := int64(sum - idealSum)
+	diffSquareSum := squareSum - idealSquareSum
+	result[0] = int(diffSquareSum/diff+diff) / 2
+	result[1] = result[0] - int(diff)
+	return result
+}
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+	return x
+}
+
+func scoreOfString(s string) int {
+	sum := 0
+	for i := 1; i < len(s); i++ {
+		sum += abs(int(s[i]) - int(s[i-1]))
+	}
+	return sum
+}
+
+func main() {
+	p1 := []int{1, 0}
+	p2 := []int{0, 1}
+	p3 := []int{-1, 0}
+	p4 := []int{0, -1}
+
+	fmt.Print(validSquare(p1, p2, p3, p4))
 }
 
 /* Randomized Set
