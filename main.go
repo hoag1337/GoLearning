@@ -1179,6 +1179,47 @@ func getDescentPeriods(prices []int) int64 {
 	}
 	return result
 }
+
+func sieveOfEratosthenes(n1, n2 int) []int {
+	prime := make([]bool, n2+1)
+	for i := range prime {
+		prime[i] = true
+	}
+	p := 2
+	for p*p <= n2 {
+		if prime[p] {
+			for i := p * p; i <= n2; i += p {
+				prime[i] = false
+			}
+		}
+		p++
+	}
+	var primes []int
+	for p := n1; p <= n2; p++ {
+		if prime[p] && p != 1 {
+			primes = append(primes, p)
+		}
+	}
+
+	return primes
+}
+
+func closestPrimes(left int, right int) []int {
+	primes := sieveOfEratosthenes(left, right)
+	if len(primes) < 2 {
+		return []int{-1, -1}
+	} else {
+		result := []int{primes[0], primes[1]}
+		for i := 2; i < len(primes); i++ {
+			if primes[i]-primes[i-1] < result[1]-result[0] {
+				result[0] = primes[i-1]
+				result[1] = primes[i]
+			}
+		}
+		return result
+	}
+}
+
 func main() {
 	//p1 := []int{1, 0}
 	//p2 := []int{0, 1}
