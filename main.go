@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 	"slices"
 	"sort"
@@ -1220,13 +1219,25 @@ func closestPrimes(left int, right int) []int {
 	}
 }
 
+func divideArray(nums []int) bool {
+	var mapper = make(map[int]int)
+	for i := 0; i < len(nums); i++ {
+		mapper[nums[i]]++
+	}
+	for _, value := range mapper {
+		if value%2 == 1 {
+			return false
+		}
+	}
+	return true
+}
+
 func main() {
 	//p1 := []int{1, 0}
 	//p2 := []int{0, 1}
 	//p3 := []int{-1, 0}
 	//p4 := []int{0, -1}
 
-	fmt.Print(getDescentPeriods([]int{3, 2, 1, 4}))
 }
 
 /* Randomized Set
