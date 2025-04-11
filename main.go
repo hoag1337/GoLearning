@@ -1296,6 +1296,27 @@ func generate(numRows int) [][]int {
 	return result
 }
 
+var triangles [][]int = buildTriangles()
+
+func buildTriangles() [][]int {
+	result := make([][]int, 33)
+	for index := range result {
+		result[index] = make([]int, index+1)
+		for i := 0; i < len(result[index]); i++ {
+			if i == 0 || i == index {
+				result[index][i] = 1
+			} else {
+				result[index][i] = result[index-1][i] + result[index-1][i-1]
+			}
+		}
+	}
+	return result
+}
+
+func getRow(rowIndex int) []int {
+	return triangles[rowIndex]
+}
+
 func main() {
 	//p1 := []int{1, 0}
 	//p2 := []int{0, 1}
