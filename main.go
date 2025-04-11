@@ -1313,6 +1313,19 @@ func buildTriangles() [][]int {
 	return result
 }
 
+func maxProfit(prices []int) int {
+	result, buyDay := 0, prices[0]
+	for i := 1; i < len(prices); i++ {
+		if prices[i]-buyDay > result {
+			result = prices[i] - buyDay
+		}
+		if prices[i] < buyDay {
+			buyDay = prices[i]
+		}
+	}
+	return result
+}
+
 func getRow(rowIndex int) []int {
 	return triangles[rowIndex]
 }
