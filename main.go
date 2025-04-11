@@ -1281,6 +1281,21 @@ func isArraySpecial(nums []int) bool {
 	return true
 }
 
+func generate(numRows int) [][]int {
+	result := make([][]int, numRows)
+	for index := range result {
+		result[index] = make([]int, index+1)
+		for i := 0; i < len(result[index]); i++ {
+			if i == 0 || i == index {
+				result[index][i] = 1
+			} else {
+				result[index][i] = result[index-1][i] + result[index-1][i-1]
+			}
+		}
+	}
+	return result
+}
+
 func main() {
 	//p1 := []int{1, 0}
 	//p2 := []int{0, 1}
