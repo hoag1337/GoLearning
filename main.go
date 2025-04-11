@@ -1232,6 +1232,45 @@ func divideArray(nums []int) bool {
 	return true
 }
 
+func longestNiceSubarray(nums []int) int {
+	n := len(nums)
+	maxLength := 1
+	left := 0
+	usedBits := 0
+
+	for right := 0; right < n; right++ {
+		for (usedBits & nums[right]) != 0 {
+			usedBits ^= nums[left]
+			left++
+		}
+
+		usedBits |= nums[right]
+		if right-left+1 > maxLength {
+			maxLength = right - left + 1
+		}
+	}
+
+	return maxLength
+}
+
+func countSymmetricIntegers(low int, high int) int {
+	result := 0
+	for num := low; num <= high; num++ {
+		if num < 100 {
+			if num%11 == 0 {
+				result++
+			}
+		} else if num >= 1000 && num < 10000 {
+			left := num/1000 + (num%1000)/100
+			right := (num%100)/10 + num%10
+			if left == right {
+				result++
+			}
+		}
+	}
+	return result
+}
+
 func main() {
 	//p1 := []int{1, 0}
 	//p2 := []int{0, 1}
