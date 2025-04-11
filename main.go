@@ -1271,6 +1271,16 @@ func countSymmetricIntegers(low int, high int) int {
 	return result
 }
 
+func isArraySpecial(nums []int) bool {
+
+	for i := 0; i < len(nums)-1; i++ {
+		if (nums[i]+nums[i+1])%2 == 0 {
+			return false
+		}
+	}
+	return true
+}
+
 func main() {
 	//p1 := []int{1, 0}
 	//p2 := []int{0, 1}
