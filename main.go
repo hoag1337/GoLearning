@@ -1409,6 +1409,22 @@ func countVowelStrings(n int) int {
 	return sum
 }
 
+func mincostTickets(days []int, costs []int) int {
+	lastDay := days[len(days)-1]
+	dp := make([]int, lastDay+1)
+	dp[0] = 0
+	i := 0
+	for day := 1; i <= lastDay; i++ {
+		if day < days[0] {
+			dp[day] = dp[day-1]
+		} else {
+			dp[day] = min(dp[day-1]+costs[0],
+				min(dp[max(day-7, 0)]+costs[1], dp[max(day-30, 0)]+costs[2]))
+		}
+	}
+	return dp[lastDay]
+}
+
 func main() {
 	fmt.Println(countVowelStrings(33))
 }
