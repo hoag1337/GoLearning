@@ -1388,11 +1388,29 @@ func countBits(n int) []int {
 	return result
 }
 
-func main() {
-	p1 := make([][]int, 0)
-	p1 = append(p1, []int{1, 3})
+func countVowelStrings(n int) int {
+	dp := make([][]int, n+1)
+	dp[0] = []int{0, 0, 0, 0, 0}
+	dp[1] = []int{1, 1, 1, 1, 1}
+	sum := 5
+	for i := 2; i <= n; i++ {
+		dp[i] = make([]int, 5)
+		for j := 0; j < 5; j++ {
+			if j == 0 {
+				dp[i][j] = sum
+				sum = 0
+			} else {
+				dp[i][j] = dp[i][j-1] - dp[i-1][j-1]
+			}
+			sum += dp[i][j]
+		}
+	}
 
-	fmt.Println(searchMatrix(p1, 3))
+	return sum
+}
+
+func main() {
+	fmt.Println(countVowelStrings(33))
 }
 
 /* Randomized Set
