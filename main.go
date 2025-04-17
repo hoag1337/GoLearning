@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"slices"
 	"sort"
@@ -1326,16 +1327,72 @@ func maxProfit(prices []int) int {
 	return result
 }
 
+func maxProfit2(prices []int) int {
+	result := 0
+	for i := 1; i < len(prices); i++ {
+		if prices[i]-prices[i-1] > 0 {
+			result += prices[i] - prices[i-1]
+		}
+	}
+	return result
+}
+
 func getRow(rowIndex int) []int {
 	return triangles[rowIndex]
 }
 
-func main() {
-	//p1 := []int{1, 0}
-	//p2 := []int{0, 1}
-	//p3 := []int{-1, 0}
-	//p4 := []int{0, -1}
+func searchMatrix(matrix [][]int, target int) bool {
+	m, n := len(matrix), len(matrix[0])
 
+	left, right := 0, m-1
+	for left <= right {
+		mid := left + (right-left)>>1
+		if matrix[mid][n-1] >= target && matrix[mid][0] <= target {
+			innerLeft, innerRight := 0, n-1
+			for innerLeft <= innerRight {
+				innerMid := innerLeft + (innerRight-innerLeft)>>1
+				if matrix[mid][innerMid] == target {
+					return true
+				} else if matrix[mid][innerMid] > target {
+					innerRight = innerMid - 1
+				} else {
+					innerLeft = innerMid + 1
+				}
+			}
+			return false
+		} else if matrix[mid][0] > target {
+			right = mid - 1
+		} else if matrix[mid][n-1] < target {
+			left = mid + 1
+		}
+	}
+
+	return false
+}
+
+func getCombination(size int) int {
+	return size * (size - 1) / 2
+}
+
+func countBits(n int) []int {
+	result := make([]int, n+1)
+	result[0] = 0
+	sub := 1
+	for i := 1; i <= n; i++ {
+		if sub*2 == i {
+			sub = i
+		}
+
+		result[i] = result[i-sub] + 1
+	}
+	return result
+}
+
+func main() {
+	p1 := make([][]int, 0)
+	p1 = append(p1, []int{1, 3})
+
+	fmt.Println(searchMatrix(p1, 3))
 }
 
 /* Randomized Set
