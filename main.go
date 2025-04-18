@@ -1439,8 +1439,74 @@ func numJewelsInStones(jewels string, stones string) int {
 	return result
 }
 
+func minEatingSpeed(piles []int, h int) int {
+	canKokoEatAt := func(speed int) bool {
+		sum := 0
+		for i := 0; i < len(piles); i++ {
+			sum += (piles[i]-1)/speed + 1
+		}
+		return sum <= h
+	}
+
+	left, right := 0, slices.Max(piles)
+	for left < right {
+		mid := left + (right-left)>>1
+		if canKokoEatAt(mid) {
+			right = mid
+		} else {
+			left = mid + 1
+		}
+	}
+
+	return left
+}
+
+func smallestNumber(n int, t int) int {
+
+	getDigitProduct := func(n int) int {
+		sum := 1
+		for n > 0 {
+			sum *= n % 10
+			n /= 10
+		}
+		return sum
+	}
+
+	for i := n; i <= n+9; i++ {
+		if getDigitProduct(i)%t == 0 {
+			return i
+		}
+	}
+
+	return n
+}
+
+func nextGreatestLetter(letters []byte, target byte) byte {
+	left, right := 0, len(letters)-1
+	for left < right {
+		mid := left + (right-left)>>1
+		if letters[mid] == target {
+			if letters[mid+1] != target {
+				return letters[mid+1]
+			} else {
+				left = mid + 1
+			}
+		} else if letters[mid] < target {
+			if letters[mid+1] > target {
+				return letters[mid+1]
+			}
+			left = mid + 1
+		} else {
+			right = mid
+		}
+
+	}
+
+	return letters[0]
+}
+
 func main() {
-	fmt.Println(countVowelStrings(33))
+	fmt.Println(nextGreatestLetter([]byte{'e', 'e', 'g', 'g'}, 'g'))
 }
 
 /* Randomized Set
