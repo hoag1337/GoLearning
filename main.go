@@ -1425,6 +1425,20 @@ func mincostTickets(days []int, costs []int) int {
 	return dp[lastDay]
 }
 
+func numJewelsInStones(jewels string, stones string) int {
+	jewelMap := make(map[byte]int)
+	result := 0
+	for i := 0; i < len(jewels); i++ {
+		jewelMap[jewels[i]] = jewelMap[jewels[i]] + 1
+	}
+	for i := 0; i < len(stones); i++ {
+		if jewelMap[stones[i]] >= 1 {
+			result++
+		}
+	}
+	return result
+}
+
 func main() {
 	fmt.Println(countVowelStrings(33))
 }
