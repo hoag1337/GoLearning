@@ -1505,8 +1505,56 @@ func nextGreatestLetter(letters []byte, target byte) byte {
 	return letters[0]
 }
 
+func countSubarrays2302(nums []int, k int64) int64 {
+	n := len(nums)
+	left, right := 0, 0
+	sum := int64(0)
+	res := int64(0)
+	for ; right < n; right++ {
+		sum += int64(nums[right])
+		for left <= right && sum*int64(right-left+1) >= k {
+			sum -= int64(nums[left])
+			left++
+		}
+
+		res += int64(right - left + 1)
+	}
+
+	return res
+}
+
+func maximumSubarraySum(nums []int, k int) int64 {
+	maxSum := int64(0)
+
+	for left := 0; left <= len(nums)-k; {
+		sum := int64(0)
+		lengthK := false
+		mapper := make(map[int]int)
+		for ptr := left; ptr < left+k; ptr++ {
+			mapper[nums[ptr]]++
+			sum += int64(nums[ptr])
+			if mapper[nums[ptr]] > 1 {
+				for i := 0; i <= ptr; i++ {
+					if nums[i] == nums[ptr] {
+						left = ptr - 1
+						break
+					}
+				}
+				break
+			}
+			if ptr == left+k-1 {
+				lengthK = true
+			}
+		}
+		if sum > maxSum && lengthK {
+			maxSum = sum
+		}
+	}
+	return maxSum
+}
+
 func main() {
-	fmt.Println(nextGreatestLetter([]byte{'e', 'e', 'g', 'g'}, 'g'))
+	fmt.Println(maximumSubarraySum([]int{1, 4, 5, 2, 9, 9, 9}, 3))
 }
 
 /* Randomized Set
