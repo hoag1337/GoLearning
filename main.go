@@ -1523,6 +1523,20 @@ func countSubarrays2302(nums []int, k int64) int64 {
 	return res
 }
 
+func numRabbits(answers []int) int {
+	sum := 0
+	rabbitCount := make(map[int]int)
+	for i := 0; i < len(answers); i++ {
+		rabbitCount[answers[i]]++
+	}
+
+	for k, v := range rabbitCount {
+		sum += int(math.Ceil(float64(v)/float64(k+1))) * (k + 1)
+	}
+
+	return sum
+}
+
 func maximumSubarraySum(nums []int, k int) int64 {
 	maxSum := int64(0)
 
@@ -1551,6 +1565,32 @@ func maximumSubarraySum(nums []int, k int) int64 {
 		}
 	}
 	return maxSum
+}
+
+func maxCount(banned []int, n int, maxSum int) int {
+	sum := 0
+	i := 1
+	count := 0
+	ban := make([]bool, n+1)
+	for _, v := range banned {
+		if v > n {
+			continue
+		}
+		ban[v] = true
+	}
+
+	for ; i <= n; i++ {
+		if ban[i] {
+			continue
+		}
+		sum += i
+		if sum > maxSum {
+			break
+		}
+		count++
+	}
+
+	return count
 }
 
 func main() {
