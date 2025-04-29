@@ -1593,8 +1593,47 @@ func maxCount(banned []int, n int, maxSum int) int {
 	return count
 }
 
+func alphabetBoardPath(target string) string {
+	r, c := 0, 0
+	s := ""
+	for _, v := range target {
+		row := int((v - 'a') / 5)
+		col := int((v - 'a') % 5)
+		for r < row {
+			if r == 4 {
+				for c > 0 {
+					s += "L"
+					c--
+				}
+			}
+			s += "D"
+			r++
+
+		}
+		for r > row {
+			s += "U"
+			r--
+		}
+		for c < col {
+			if r == 5 {
+				s += "U"
+				r--
+			} else {
+				s += "R"
+				c++
+			}
+		}
+		for c > col {
+			s += "L"
+			c--
+		}
+		s += "!"
+	}
+	return s
+}
+
 func main() {
-	fmt.Println(maximumSubarraySum([]int{1, 4, 5, 2, 9, 9, 9}, 3))
+	fmt.Println(alphabetBoardPath("zdz"))
 }
 
 /* Randomized Set
