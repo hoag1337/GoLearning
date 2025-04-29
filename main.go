@@ -1632,8 +1632,34 @@ func alphabetBoardPath(target string) string {
 	return s
 }
 
+func lengthOfLongestSubstring(s string) int {
+	if len(s) == 0 {
+		return 0
+	}
+	result := 0
+	mapper := make(map[rune]int)
+	left, right := 0, 0
+	for ; right < len(s); right++ {
+		mapper[rune(s[right])]++
+		if mapper[rune(s[right])] > 1 {
+			result = max(result, right-left)
+			for left < right {
+				if mapper[rune(s[left])] == mapper[rune(s[right])] {
+					mapper[rune(s[left])]--
+					left++
+					break
+				}
+				mapper[rune(s[left])]--
+
+				left++
+			}
+		}
+	}
+	return max(result, right-left)
+}
+
 func main() {
-	fmt.Println(alphabetBoardPath("zdz"))
+	fmt.Println(lengthOfLongestSubstring("ggububgvfk"))
 }
 
 /* Randomized Set
