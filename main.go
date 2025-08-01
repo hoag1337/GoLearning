@@ -1681,6 +1681,22 @@ func isZeroArray(nums []int, queries [][]int) bool {
 	return true
 }
 
+func countCompleteSubarrays(nums []int) int {
+	curr := make(map[int]int)
+	left, right, result, n := 0, 0, 0, len(nums)
+	for i := 0; i < n; i++ {
+		curr[i]++
+	}
+	for right < n {
+		if curr[nums[right]]-1 == 0 {
+			result += right - left
+			left = right
+
+		}
+	}
+	return result
+}
+
 func main() {
 	fmt.Println()
 }
