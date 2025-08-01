@@ -1682,16 +1682,34 @@ func isZeroArray(nums []int, queries [][]int) bool {
 }
 
 func countCompleteSubarrays(nums []int) int {
-	curr := make(map[int]int)
-	left, right, result, n := 0, 0, 0, len(nums)
-	for i := 0; i < n; i++ {
-		curr[i]++
+	set := map[int]bool{}
+	for _, v := range nums {
+		set[v] = true
 	}
-	for right < n {
-		if curr[nums[right]]-1 == 0 {
-			result += right - left
-			left = right
+	total := len(set)
+	count := 0
+	freq := map[int]int{}
+	l := 0
 
+	for r, val := range nums {
+		freq[val]++
+		for len(freq) == total {
+			count += len(nums) - r
+			freq[nums[l]]--
+			if freq[nums[l]] == 0 {
+				delete(freq, nums[l])
+			}
+			l++
+		}
+	}
+	return count
+}
+
+func findWordsContaining(words []string, x byte) []int {
+	result := make([]int, 0)
+	for i := 0; i < len(words); i++ {
+		if strings.Contains(words[i], string(x)) {
+			result = append(result, i)
 		}
 	}
 	return result
