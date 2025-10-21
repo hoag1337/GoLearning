@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 type TreeNode struct {
@@ -1713,6 +1714,36 @@ func findWordsContaining(words []string, x byte) []int {
 		}
 	}
 	return result
+}
+
+func isValid(word string) bool {
+	n := len(word)
+	if n < 3 {
+		return false
+	} else {
+		vowels := []rune{'a', 'e', 'i', 'o', 'u'}
+		consonants := []rune{
+			'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm',
+			'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z',
+		}
+		vowel := false
+		consonant := false
+		for i := 0; i < n; i++ {
+			if unicode.IsLetter(rune(word[i])) || unicode.IsNumber(rune(word[i])) {
+				if slices.Contains(vowels, unicode.ToLower(rune(word[i]))) {
+					vowel = true
+				} else if slices.Contains(consonants, unicode.ToLower(rune(word[i]))) {
+					consonant = true
+				}
+			} else {
+				return false
+			}
+
+		}
+
+		return vowel && consonant
+	}
+
 }
 
 func main() {
