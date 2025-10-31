@@ -1774,6 +1774,22 @@ func getSneakyNumbers(nums []int) []int {
 	return []int{x1, x2}
 }
 
+func maximumDifference(nums []int) int {
+	maxDiff := -1
+	minTemp := nums[0]
+	for i := 1; i < len(nums); i++ {
+		if nums[i] <= minTemp {
+			minTemp = nums[i]
+		} else {
+			if nums[i]-minTemp >= maxDiff {
+				maxDiff = nums[i] - minTemp
+			}
+		}
+	}
+
+	return maxDiff
+}
+
 func main() {
 	fmt.Println()
 }
