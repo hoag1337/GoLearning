@@ -1790,6 +1790,23 @@ func maximumDifference(nums []int) int {
 	return maxDiff
 }
 
+func countTrapezoids(points [][]int) int {
+	var countMap = make(map[int]int)
+	for _, point := range points {
+		countMap[point[1]]++
+	}
+
+	var MOD = int(1e9 + 7)
+	var result, upSum int = 0, 0
+	for _, value := range countMap {
+		edgeByHeight := value * (value - 1) / 2
+		result = (result + upSum*edgeByHeight) % MOD
+		upSum = (upSum + edgeByHeight) % MOD
+	}
+
+	return result % MOD
+}
+
 func main() {
 	fmt.Println()
 }
