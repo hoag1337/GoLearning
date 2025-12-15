@@ -1807,6 +1807,31 @@ func countTrapezoids(points [][]int) int {
 	return result % MOD
 }
 
+func countPermutations(complexity []int) int {
+	MOD := int(1e9 + 7)
+	start := complexity[0]
+	complexity = complexity[1:]
+	sort.Ints(complexity[:1])
+	result := 0
+	if complexity[0] <= start {
+		return 0
+	}
+	for i := 1; i < len(complexity); i++ {
+		if complexity[i] <= complexity[i-1] {
+			return 0
+		}
+	}
+	factorial := func(n int) int {
+		res := 1
+		for i := 2; i <= n; i++ {
+			res = (res * i) % MOD
+		}
+		return res
+	}
+	result = factorial(len(complexity) - 1)
+	return result
+}
+
 func main() {
 	fmt.Println()
 }
